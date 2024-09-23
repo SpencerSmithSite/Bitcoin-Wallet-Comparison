@@ -271,89 +271,113 @@ class CustomDataGridSource extends DataGridSource {
     return DataGridRowAdapter(
       cells: row.getCells().map<Widget>((dataCell) {
         if (dataCell.columnName == 'Wallet') {
-          return Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              child: Text(
-                dataCell.value.toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+          return Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    dataCell.value.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-                softWrap: true,
               ),
-            ),
+            ],
           );
         }
         if (dataCell.columnName == 'Icon') {
           // Assuming getIcon returns an asset path
-          return Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              child: Image.asset(
-                dataCell.value.toString(), // Load the image from assets
-                width: 50, // Adjust width as needed
-                height: 50, // Adjust height as needed
-                fit: BoxFit.contain, // Adjust the fit
-                errorBuilder: (context, error, stackTrace) {
-                  // Show a placeholder in case of error
-                  return const Icon(Icons.error, size: 50);
-                },
+          return Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.center,
+                  child: Image.asset(
+                    dataCell.value.toString(), // Load the image from assets
+                    width: 50, // Adjust width as needed
+                    height: 50, // Adjust height as needed
+                    fit: BoxFit.contain, // Adjust the fit
+                    errorBuilder: (context, error, stackTrace) {
+                      // Show a placeholder in case of error
+                      return const Icon(Icons.error, size: 50);
+                    },
+                  ),
+                ),
               ),
-            ),
+            ],
           );
         }
         if (dataCell.columnName == 'Score') {
-          return Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              child: Text(
-                dataCell.value.toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+          return Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.center,
+                  child: Text(
+                    dataCell.value.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
+                    softWrap: true,
+                  ),
                 ),
-                textAlign: TextAlign.center,
-                softWrap: true,
               ),
-            ),
+            ],
           );
         } else {
           if (dataCell.value.toString() == "Y") {
-            return Flexible(
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: const Icon(Icons.check,
-                    color: Color.fromARGB(255, 0, 232, 8)),
-              ),
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.check,
+                        color: Color.fromARGB(255, 0, 232, 8)),
+                  ),
+                ),
+              ],
             );
           } else if (dataCell.value.toString() == "N") {
-            return Flexible(
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                alignment: Alignment.center,
-                child: const Icon(Icons.close,
-                    color: Color.fromARGB(255, 255, 17, 0)),
-              ),
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.close,
+                        color: Color.fromARGB(255, 255, 17, 0)),
+                  ),
+                ),
+              ],
             );
           }
           // For other columns, display the text
-          return Flexible(
-            child: Container(
-              padding: const EdgeInsets.all(8.0),
-              alignment: Alignment.center,
-              child: Tooltip(
-                message: dataCell.value.toString(),
-                child: const Icon(Icons.info,
-                    color: Color.fromARGB(255, 255, 247, 0)),
-                //color: Color.fromARGB(255, 255, 140, 0)),
+          return Row(
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  alignment: Alignment.center,
+                  child: Tooltip(
+                    message: dataCell.value.toString(),
+                    child: const Icon(Icons.info,
+                        color: Color.fromARGB(255, 255, 247, 0)),
+                    //color: Color.fromARGB(255, 255, 140, 0)),
+                  ),
+                ),
               ),
-            ),
+            ],
           );
         }
       }).toList(),

@@ -60,4 +60,5 @@ class DefaultFirebaseOptions {
     authDomain: 'bitcoin-wallet-comparison.firebaseapp.com',
     storageBucket: 'bitcoin-wallet-comparison.appspot.com',
   );
+
 }
