@@ -1,0 +1,39 @@
+Functionality:
+
+    Add sorting functionality
+
+    Make the android, ios, windows, mac, and linux icons clickable links that take you to the wallets download page
+
+    Make the logo a button to take you back to the main page. 
+
+Pages:
+
+    Bitcoin Explained
+
+    Feature/Information Update Request Form
+        The information for the listed wallets is as correct and current as I am aware of. However, I am only human, and the project teams are constantly shipping and upgrading.
+        If you find an area that needs updating, please let me know using the form below so i can fix it posthaste. 
+
+    About
+
+    Support this project
+
+
+
+
+Cleaning up:
+
+    finish feature list of remaining wallets
+
+    Some categories are ambiguous. "Swaps" for example
+
+
+Deployment:
+
+    Test it out on my domain
+
+    Buy "BitcoinWalletComparison.()"
+
+    Release
+
+    set up btcpayserver for donations
