@@ -35,6 +35,8 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -72,9 +74,18 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
         title: Text(
-          'Bitcoin\nWallet Comparison',
+          screenWidth > 529
+              ? 'Bitcoin Wallet Comparison'
+              : screenWidth > 384
+                  ? 'Bitcoin\nWallet Comparison'
+                  : 'Bitcoin\nWallet\nComparison', // Dynamic title
+          overflow: TextOverflow.fade,
           style: GoogleFonts.lato(
-            fontSize: 30,
+            fontSize: screenWidth > 529
+                ? 30
+                : screenWidth > 384
+                    ? 25
+                    : 20, // Dynamic font size
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
