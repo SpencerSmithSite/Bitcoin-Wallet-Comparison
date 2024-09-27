@@ -30,8 +30,6 @@ Cleaning up:
 
 Deployment:
 
-    Test it out on my domain
-
     Buy "BitcoinWalletComparison.()"
 
     Release

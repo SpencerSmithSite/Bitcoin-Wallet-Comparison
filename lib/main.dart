@@ -175,7 +175,9 @@ class CustomDataGridSource extends DataGridSource {
             // This is the icon path
             DataGridCell(columnName: 'Icon', value: wallet.getIcon()),
             DataGridCell(columnName: 'Score', value: wallet.getScore()),
-            DataGridCell(columnName: 'Android', value: wallet.getAndroid()),
+            DataGridCell(
+                columnName: 'Google Play', value: wallet.getAndroid()),
+            DataGridCell(columnName: 'APK', value: wallet.getApk()),
             DataGridCell(columnName: 'IOS', value: wallet.getIos()),
             DataGridCell(columnName: 'Windows', value: wallet.getWindows()),
             DataGridCell(columnName: 'MacOS', value: wallet.getMacos()),
@@ -265,6 +267,7 @@ class CustomDataGridSource extends DataGridSource {
             DataGridCell(columnName: 'Signet', value: wallet.getSignet()),
             DataGridCell(columnName: 'Buy', value: wallet.getBuy()),
             DataGridCell(columnName: 'Sell', value: wallet.getSell()),
+            DataGridCell(columnName: 'Shop', value: wallet.getShop()),
             DataGridCell(columnName: 'Swaps', value: wallet.getSwaps()),
             DataGridCell(
                 columnName: 'Atomic Swaps', value: wallet.getAtomicSwaps()),
@@ -404,7 +407,6 @@ List<Wallet> wallets = [
   alby,
   aqua,
   blink,
-  blitz,
   blixt,
   blue,
   breez,
@@ -420,7 +422,6 @@ List<Wallet> wallets = [
   muun,
   nunchuk,
   phoenix,
-  pouch,
   primal,
   proton,
   sparrow,

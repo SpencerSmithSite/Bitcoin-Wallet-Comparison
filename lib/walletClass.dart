@@ -4,6 +4,7 @@ class Wallet {
   final String icon;
   final String score;
   final String android;
+  final String apk;
   final String ios;
   final String windows;
   final String macos;
@@ -61,6 +62,7 @@ class Wallet {
   final String signet;
   final String buy;
   final String sell;
+  final String shop;
   final String swaps;
   final String atomicSwaps;
 
@@ -70,6 +72,7 @@ class Wallet {
     required this.icon,
     required this.score,
     required this.android,
+    required this.apk,
     required this.ios,
     required this.windows,
     required this.macos,
@@ -127,6 +130,7 @@ class Wallet {
     required this.signet,
     required this.buy,
     required this.sell,
+    required this.shop,
     required this.swaps,
     required this.atomicSwaps,
   });
@@ -137,6 +141,7 @@ class Wallet {
   String getScore() {
     int score = 0;
     if (getAndroid() != 'N') score++;
+    if (getApk() != 'N') score++;
     if (getIos() != 'N') score++;
     if (getWindows() != 'N') score++;
     if (getMacos() != 'N') score++;
@@ -194,12 +199,14 @@ class Wallet {
     if (getSignet() != 'N') score++;
     if (getBuy() != 'N') score++;
     if (getSell() != 'N') score++;
+    if (getShop() != 'N') score++;
     if (getSwaps() != 'N') score++;
     if (getAtomicSwaps() != 'N') score++;
     return score.toString();
   }
 
   String getAndroid() => android;
+  String getApk() => apk;
   String getIos() => ios;
   String getWindows() => windows;
   String getMacos() => macos;
@@ -257,6 +264,7 @@ class Wallet {
   String getSignet() => signet;
   String getBuy() => buy;
   String getSell() => sell;
+  String getShop() => shop;
   String getSwaps() => swaps;
   String getAtomicSwaps() => atomicSwaps;
 }
