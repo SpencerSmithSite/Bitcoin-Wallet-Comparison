@@ -379,7 +379,6 @@ List<Wallet> wallets = [
   muun,
   nunchuk,
   phoenix,
-  pouch,
   primal,
   proton,
   sparrow,

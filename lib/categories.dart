@@ -3,6 +3,7 @@ const List<String> categories = [
   'Icon',
   'Score',
   'Android',
+  'APK',
   'IOS',
   'Windows',
   'MacOS',
@@ -60,6 +61,7 @@ const List<String> categories = [
   'Signet',
   'Buy',
   'Sell',
+  'Shop',
   'Swaps',
   'Atomic Swaps',
 ];

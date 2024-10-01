@@ -6,6 +6,8 @@ import 'wallets.dart';
 import 'categories.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_svg/flutter_svg.dart'; // For displaying SVG images
+import 'package:url_launcher/url_launcher.dart'; //
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -93,13 +95,16 @@ class MyHomePage extends StatelessWidget {
         ),
         centerTitle: true, // Ensure the title stays centered
         actions: [
-          IconButton(
-            iconSize: 40,
-            icon: const Icon(Icons.menu),
-            color: const Color.fromARGB(255, 105, 105, 105),
-            onPressed: () {
-              // Add menu button functionality here
-            },
+          Tooltip(
+            message: 'More Features Coming Soon (tm)',
+            child: IconButton(
+              iconSize: 40,
+              icon: const Icon(Icons.menu),
+              color: const Color.fromARGB(255, 105, 105, 105),
+              onPressed: () {
+                // Add menu button functionality here
+              },
+            ),
           ),
         ],
       ),
@@ -116,13 +121,15 @@ class MyHomePage extends StatelessWidget {
         ),
         child: SfDataGrid(
           source: CustomDataGridSource(),
-          columnWidthMode: ColumnWidthMode.auto,
+          columnWidthMode: ColumnWidthMode.none,
           frozenColumnsCount: 1,
           columns: [
             // Loop through each category to create a GridColumn
             for (String category in categories)
               GridColumn(
                 columnName: category,
+                width:
+                    category == 'Hardware Wallet Support' ? 120 : double.nan,
                 label: Container(
                   padding: const EdgeInsets.all(8.0),
                   alignment: Alignment.center,
@@ -141,24 +148,38 @@ class MyHomePage extends StatelessWidget {
         ),
       ),
       bottomNavigationBar: Container(
-        height: 50,
-        padding: const EdgeInsets.all(8.0),
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(255, 31, 31, 31),
-              Color.fromARGB(255, 48, 55, 58),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
+          height: 50,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                Color.fromARGB(255, 31, 31, 31),
+                Color.fromARGB(255, 48, 55, 58),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
-        ),
-        child: const Text(
-          'This project is a work in progress. If you enjoy it, please consider donating.',
-          style: TextStyle(color: Colors.white, fontSize: 10),
-          textAlign: TextAlign.center,
-        ),
-      ),
+          child: const Row(
+            mainAxisAlignment:
+                MainAxisAlignment.spaceBetween, // Align text on opposite sides
+            children: [
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'This project is a work in progress. Please report any issues or suggestions on Nostr.',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  'Nostr: @Parkour\nzap me at: olivinefireant1@primal.net',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
@@ -175,8 +196,7 @@ class CustomDataGridSource extends DataGridSource {
             // This is the icon path
             DataGridCell(columnName: 'Icon', value: wallet.getIcon()),
             DataGridCell(columnName: 'Score', value: wallet.getScore()),
-            DataGridCell(
-                columnName: 'Google Play', value: wallet.getAndroid()),
+            DataGridCell(columnName: 'Android', value: wallet.getAndroid()),
             DataGridCell(columnName: 'APK', value: wallet.getApk()),
             DataGridCell(columnName: 'IOS', value: wallet.getIos()),
             DataGridCell(columnName: 'Windows', value: wallet.getWindows()),
@@ -304,8 +324,7 @@ class CustomDataGridSource extends DataGridSource {
               ),
             ],
           );
-        }
-        if (dataCell.columnName == 'Icon') {
+        } else if (dataCell.columnName == 'Icon') {
           // Assuming getIcon returns an asset path
           return Row(
             children: [
@@ -327,8 +346,7 @@ class CustomDataGridSource extends DataGridSource {
               ),
             ],
           );
-        }
-        if (dataCell.columnName == 'Score') {
+        } else if (dataCell.columnName == 'Score') {
           return Row(
             children: [
               Flexible(
@@ -337,9 +355,13 @@ class CustomDataGridSource extends DataGridSource {
                   alignment: Alignment.center,
                   child: Text(
                     dataCell.value.toString(),
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
+                      //color: Colors.white,
+                      color: getColorFromScore(
+                          double.parse(dataCell.value.toString()), 11, 33),
+                      // backgroundColor: const Color.fromARGB(255, 48, 55, 58),
                     ),
                     textAlign: TextAlign.center,
                     softWrap: true,
@@ -348,6 +370,138 @@ class CustomDataGridSource extends DataGridSource {
               ),
             ],
           );
+        } else if (dataCell.columnName == 'Android') {
+          String cellValue = dataCell.value.toString();
+
+          // Check if the value is not 'N'
+          if (cellValue != 'N') {
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: MouseRegion(
+                      cursor:
+                          SystemMouseCursors.click, // Change cursor on hover
+                      child: GestureDetector(
+                        onTap: () {
+                          _launchURL(cellValue); // Launch the URL on tap
+                        },
+                        child: Image.asset(
+                            'assets/GooglePlay.png', // Load the AppStore SVG image from assets
+                            width: 100, // Adjust width as needed
+                            height: 100, // Adjust height as needed
+                            fit: BoxFit.contain // Adjust the fit
+                            ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.close,
+                        color: Color.fromARGB(255, 255, 17, 0)),
+                  ),
+                ),
+              ],
+            );
+          }
+        } else if (dataCell.columnName == 'IOS') {
+          String cellValue = dataCell.value.toString();
+
+          // Check if the value is not 'N'
+          if (cellValue != 'N') {
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: MouseRegion(
+                      cursor:
+                          SystemMouseCursors.click, // Change cursor on hover
+                      child: GestureDetector(
+                        onTap: () {
+                          _launchURL(cellValue); // Launch the URL on tap
+                        },
+                        child: SvgPicture.asset(
+                          'assets/AppStore.svg', // Load the AppStore SVG image from assets
+                          width: 50, // Adjust width as needed
+                          height: 50, // Adjust height as needed
+                          fit: BoxFit.contain, // Adjust the fit
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.close,
+                        color: Color.fromARGB(255, 255, 17, 0)),
+                  ),
+                ),
+              ],
+            );
+          }
+        } else if (dataCell.columnName == 'APK' ||
+            dataCell.columnName == 'Windows' ||
+            dataCell.columnName == 'MacOS' ||
+            dataCell.columnName == 'Linux') {
+          String cellValue = dataCell.value.toString();
+
+          // Check if the value is not 'N'
+          if (cellValue != 'N') {
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: MouseRegion(
+                      cursor:
+                          SystemMouseCursors.click, // Change cursor on hover
+                      child: GestureDetector(
+                        onTap: () {
+                          _launchURL(cellValue); // Launch the URL on tap
+                        },
+                        child: const Icon(Icons.download_rounded,
+                            color: Color.fromARGB(255, 0, 232, 8)),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          } else {
+            // Handle case where value is 'N'
+            return Row(
+              children: [
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.all(8.0),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.close,
+                        color: Color.fromARGB(255, 255, 17, 0)),
+                  ),
+                ),
+              ],
+            );
+          }
         } else {
           if (dataCell.value.toString() == "Y") {
             return Row(
@@ -375,8 +529,7 @@ class CustomDataGridSource extends DataGridSource {
                 ),
               ],
             );
-          }
-          // For other columns, display the text
+          } // For other columns, display the text
           return Row(
             children: [
               Flexible(
@@ -399,6 +552,50 @@ class CustomDataGridSource extends DataGridSource {
   }
 }
 
+// Updated function to launch the URL
+void _launchURL(String url) async {
+  Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri,
+        mode: LaunchMode.externalApplication); // External browser mode
+  } else {
+    throw 'Could not launch $url';
+  }
+}
+
+// function to get the color based on a score
+Color getColorFromScore(double score, double minScore, double maxScore) {
+  // Normalize the score to a value between 0 and 1
+  double normalizedScore = (score - minScore) / (maxScore - minScore);
+
+  // Calculate the color on the green-to-red spectrum
+  return Color.lerp(const Color.fromARGB(255, 27, 27, 27),
+      const Color.fromARGB(255, 47, 255, 0), normalizedScore)!;
+}
+
+// Function to rank wallets and assign colors based on scores
+Map<Wallet, Color> assignColorsToWallets(List<Wallet> wallets) {
+  // Get the scores of all wallets
+  List<double> scores =
+      wallets.map((wallet) => wallet.getScore()).cast<double>().toList();
+
+  // Find the minimum and maximum scores for normalization
+  double minScore = scores.reduce((a, b) => a < b ? a : b);
+  double maxScore = scores.reduce((a, b) => a > b ? a : b);
+
+  // Create a map to hold wallet and its assigned color
+  Map<Wallet, Color> walletColors = {};
+
+  // Assign colors to wallets based on their scores
+  for (var wallet in wallets) {
+    double score = wallet.getScore() as double;
+    Color color = getColorFromScore(score, minScore, maxScore);
+    walletColors[wallet] = color;
+  }
+
+  return walletColors;
+}
+
 // This is a list to hold the currently displayed wallets
 List<Wallet> results = [];
 
@@ -417,7 +614,7 @@ List<Wallet> wallets = [
   fedi,
   fullyNoded,
   green,
-  harbor,
+  //harbor,
   keeper,
   muun,
   nunchuk,
