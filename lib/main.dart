@@ -160,22 +160,40 @@ class MyHomePage extends StatelessWidget {
               end: Alignment.bottomCenter,
             ),
           ),
-          child: const Row(
+          child: Row(
             mainAxisAlignment:
                 MainAxisAlignment.spaceBetween, // Align text on opposite sides
             children: [
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'This project is a work in progress. Please report any issues or suggestions on Nostr.',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+              const Flexible(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    'This project is a work in progress.\nPlease report issues/suggestions on Nostr.',
+                    style: TextStyle(color: Colors.white, fontSize: 12),
+                    //align the text to the center
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis, // Optionally add ellipsis
+                  ),
                 ),
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text(
-                  'Nostr: @Parkour\nzap me at: olivinefireant1@primal.net',
-                  style: TextStyle(color: Colors.white, fontSize: 12),
+                child: MouseRegion(
+                  cursor: SystemMouseCursors.click, // Change cursor on hover
+                  child: GestureDetector(
+                    onTap: () {
+                      _launchURL(
+                        'https://primal.net/p/npub1fsndf82plzymhaptnjzzzpj8cwymqfu2j6hy62hrnv8nn6dxk85qvtuxeq',
+                      ); // Launch the URL on tap
+                    },
+                    // Add the nostr.png image here
+                    child: Image.asset(
+                      'assets/nostr.png',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -360,7 +378,7 @@ class CustomDataGridSource extends DataGridSource {
                       fontSize: 14,
                       //color: Colors.white,
                       color: getColorFromScore(
-                          double.parse(dataCell.value.toString()), 11, 33),
+                          double.parse(dataCell.value.toString()), 11, 34),
                       // backgroundColor: const Color.fromARGB(255, 48, 55, 58),
                     ),
                     textAlign: TextAlign.center,
