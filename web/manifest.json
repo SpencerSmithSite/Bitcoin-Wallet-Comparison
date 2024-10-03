@@ -8,16 +8,23 @@
     "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-"icons": [
-  {
-    "src": "assets/logo2.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  },
-  {
-    "src": "assets/logo2.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+    "icons": [
+        {
+          "src": "assets/android-chrome-192x192.png", // Android Chrome 192x192
+          "sizes": "192x192",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "assets/android-chrome-512x512.png", // Android Chrome 256x256
+          "sizes": "256x256",
+          "type": "image/png",
+          "purpose": "any maskable"
+        },
+        {
+          "src": "assets/apple-touch-icon.png", // Apple Touch Icon
+          "sizes": "180x180",
+          "type": "image/png"
+        }
+      ],
 }
