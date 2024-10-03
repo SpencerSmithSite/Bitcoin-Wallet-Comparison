@@ -1911,7 +1911,7 @@ const Wallet zbd = Wallet(
     windows: 'N',
     macos: 'N',
     linux: 'N',
-    usa: 'N',
+    usa: 'Y',
     darkMode: 'Y',
     multiLanguage: 'N',
     btcOnly: 'Y',
