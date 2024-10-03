@@ -373,12 +373,12 @@ class CustomDataGridSource extends DataGridSource {
                   alignment: Alignment.center,
                   child: Text(
                     dataCell.value.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14,
                       //color: Colors.white,
-                      color: getColorFromScore(
-                          double.parse(dataCell.value.toString()), 11, 34),
+                      // color: getColorFromScore(
+                      //     double.parse(dataCell.value.toString()), 11, 34),
                       // backgroundColor: const Color.fromARGB(255, 48, 55, 58),
                     ),
                     textAlign: TextAlign.center,
