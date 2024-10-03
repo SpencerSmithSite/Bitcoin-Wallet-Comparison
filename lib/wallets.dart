@@ -286,7 +286,7 @@ const Wallet blixt = Wallet(
     windows: 'N',
     macos: 'N',
     linux: 'N',
-    usa: 'N',
+    usa: 'Y',
     darkMode: 'Y',
     multiLanguage: 'Y',
     btcOnly: 'Y',
