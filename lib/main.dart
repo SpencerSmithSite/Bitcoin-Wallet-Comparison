@@ -32,15 +32,35 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  bool isExpanded = false;
+
+  // Maintain the state of checkboxes
+  List<bool> selectedOptions = List.generate(62, (index) => false);
+
+  // Add a ScrollController to control the scrollbar
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    // Dispose the ScrollController to prevent memory leaks
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 21, 21, 21),
       appBar: AppBar(
         toolbarHeight: 100.0,
         flexibleSpace: Container(
@@ -48,29 +68,28 @@ class MyHomePage extends StatelessWidget {
             gradient: LinearGradient(
               colors: [
                 Color.fromARGB(255, 31, 31, 31),
-                Color.fromARGB(255, 48, 55, 58),
+                Color.fromARGB(255, 44, 49, 51)
               ],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
             ),
           ),
         ),
-        // TODO: This is the logo...might make it clickable
-        leadingWidth: 80, // Increase the width of the leading widget
+        leadingWidth: 80,
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Material(
             elevation: 4.0,
             shape: const CircleBorder(),
             child: Container(
-              width: 70, // Set the width of the logo
-              height: 70, // Set the height of the logo
+              width: 70,
+              height: 70,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
               child: Image.asset(
                 'assets/logoCircle.png',
-                fit: BoxFit.contain, // Ensure the image scales properly
+                fit: BoxFit.contain,
               ),
             ),
           ),
@@ -80,20 +99,20 @@ class MyHomePage extends StatelessWidget {
               ? 'Bitcoin Wallet Comparison'
               : screenWidth > 384
                   ? 'Bitcoin\nWallet Comparison'
-                  : 'Bitcoin\nWallet\nComparison', // Dynamic title
+                  : 'Bitcoin\nWallet\nComparison',
           overflow: TextOverflow.fade,
           style: GoogleFonts.lato(
             fontSize: screenWidth > 529
                 ? 30
                 : screenWidth > 384
                     ? 25
-                    : 20, // Dynamic font size
+                    : 20,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
           textAlign: TextAlign.center,
         ),
-        centerTitle: true, // Ensure the title stays centered
+        centerTitle: true,
         actions: [
           Tooltip(
             message: 'More Features Coming Soon (tm)',
@@ -101,103 +120,243 @@ class MyHomePage extends StatelessWidget {
               iconSize: 40,
               icon: const Icon(Icons.menu),
               color: const Color.fromARGB(255, 105, 105, 105),
-              onPressed: () {
-                // Add menu button functionality here
-              },
+              onPressed: () {},
             ),
           ),
         ],
       ),
-      body: Container(
+      body: Column(
+        children: [
+          // Add a faint grey divider
+          const Divider(
+            color: Color.fromARGB(255, 105, 105, 105), // Faint grey line
+            thickness: 0.5, // Adjust thickness as needed
+            height: 0.5, // Remove default padding
+          ),
+          // Expandable Section
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+            child: Container(
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 44, 49, 51),
+                    Color.fromARGB(255, 48, 55, 58),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                //this rounds the edges of the container
+                //borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: ListTile(
+                title: const Text(
+                  'Filter and Sort',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                trailing: IconButton(
+                  icon: Icon(
+                    isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    color: const Color.fromARGB(255, 105, 105, 105),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isExpanded = !isExpanded;
+                    });
+                  },
+                ),
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+              ),
+            ),
+          ),
+          if (isExpanded)
+            Expanded(
+              child: ScrollbarTheme(
+                data: ScrollbarThemeData(
+                  thumbColor: WidgetStateProperty.all(
+                    const Color.fromARGB(255, 249, 155, 40),
+                  ), // Set thumb color
+                ),
+                child: Scrollbar(
+                  controller: _scrollController,
+                  //make the scrollbar always visible
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    controller: ScrollController(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(0.0),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 31, 31, 31),
+                              Color.fromARGB(255, 48, 55, 58),
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text(
+                              'Select the features you want to filter and sort by:',
+                              style: TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            // Grid of checkboxes
+                            GridView.builder(
+                              controller: _scrollController,
+                              shrinkWrap:
+                                  true, // Ensures the GridView doesn't take up infinite height
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: filters.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    6, // Number of columns in the grid
+                                mainAxisSpacing: 6.0,
+                                crossAxisSpacing: 6.0,
+                                childAspectRatio:
+                                    4, // Adjust aspect ratio to fit labels and checkboxes
+                              ),
+                              itemBuilder: (context, index) {
+                                return Row(
+                                  children: [
+                                    Checkbox(
+                                      value: selectedOptions[index],
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          selectedOptions[index] =
+                                              value ?? false;
+                                        });
+                                      },
+                                    ),
+                                    Flexible(
+                                      child: Text(
+                                        filters[index],
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          // DataGrid Section with Gradient Background
+          Expanded(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color.fromARGB(255, 249, 155, 40),
+                    Color.fromARGB(255, 143, 72, 195),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+              ),
+              child: SfDataGrid(
+                source: CustomDataGridSource(),
+                columnWidthMode: ColumnWidthMode.none,
+                frozenColumnsCount: 1,
+                columns: [
+                  for (String category in categories)
+                    GridColumn(
+                      columnName: category,
+                      width: category == 'Hardware Wallet Support'
+                          ? 120
+                          : double.nan,
+                      label: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        alignment: Alignment.center,
+                        child: Text(
+                          category,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          textAlign: TextAlign.center,
+                          softWrap: true,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 249, 155, 40),
-              Color.fromARGB(255, 143, 72, 195),
+              Color.fromARGB(255, 31, 31, 31),
+              Color.fromARGB(255, 48, 55, 58),
             ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
           ),
         ),
-        child: SfDataGrid(
-          source: CustomDataGridSource(),
-          columnWidthMode: ColumnWidthMode.none,
-          frozenColumnsCount: 1,
-          columns: [
-            // Loop through each category to create a GridColumn
-            for (String category in categories)
-              GridColumn(
-                columnName: category,
-                width:
-                    category == 'Hardware Wallet Support' ? 120 : double.nan,
-                label: Container(
-                  padding: const EdgeInsets.all(8.0),
-                  alignment: Alignment.center,
-                  child: Text(
-                    category,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Flexible(
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  'This project is a work in progress.\nPlease report issues/suggestions on Nostr.',
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    _launchURL(
+                      'https://primal.net/p/npub1fsndf82plzymhaptnjzzzpj8cwymqfu2j6hy62hrnv8nn6dxk85qvtuxeq',
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/nostr.png',
+                    width: 50,
+                    height: 50,
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
+            ),
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-          height: 50,
-          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color.fromARGB(255, 31, 31, 31),
-                Color.fromARGB(255, 48, 55, 58),
-              ],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: Row(
-            mainAxisAlignment:
-                MainAxisAlignment.spaceBetween, // Align text on opposite sides
-            children: [
-              const Flexible(
-                child: Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    'This project is a work in progress.\nPlease report issues/suggestions on Nostr.',
-                    style: TextStyle(color: Colors.white, fontSize: 12),
-                    //align the text to the center
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis, // Optionally add ellipsis
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: MouseRegion(
-                  cursor: SystemMouseCursors.click, // Change cursor on hover
-                  child: GestureDetector(
-                    onTap: () {
-                      _launchURL(
-                        'https://primal.net/p/npub1fsndf82plzymhaptnjzzzpj8cwymqfu2j6hy62hrnv8nn6dxk85qvtuxeq',
-                      ); // Launch the URL on tap
-                    },
-                    // Add the nostr.png image here
-                    child: Image.asset(
-                      'assets/nostr.png',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )),
     );
   }
 }
@@ -206,7 +365,7 @@ class CustomDataGridSource extends DataGridSource {
   final List<DataGridRow> _dataGridRows = [];
 
   CustomDataGridSource() {
-    for (var wallet in wallets) {
+    for (var wallet in sortByScoreDesc(wallets)) {
       _dataGridRows.add(
         DataGridRow(
           cells: [
@@ -649,3 +808,273 @@ List<Wallet> wallets = [
   zbd,
   zeus
 ];
+
+List<Wallet> sortByScoreAsc(List<Wallet> wallets) {
+  wallets.sort((a, b) => a.getScore().compareTo(b.getScore()));
+  return wallets;
+}
+
+List<Wallet> sortByScoreDesc(List<Wallet> wallets) {
+  wallets.sort((a, b) => b.getScore().compareTo(a.getScore()));
+  return wallets;
+}
+
+List<Wallet> filterForAndroid(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getAndroid() != 'N').toList();
+}
+
+List<Wallet> filterForApk(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getApk() != 'N').toList();
+}
+
+List<Wallet> filterForIos(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getIos() != 'N').toList();
+}
+
+List<Wallet> filterForWindows(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getWindows() != 'N').toList();
+}
+
+List<Wallet> filterForMacos(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMacos() != 'N').toList();
+}
+
+List<Wallet> filterForLinux(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getLinux() != 'N').toList();
+}
+
+List<Wallet> filterForUsa(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getUsa() != 'N').toList();
+}
+
+List<Wallet> filterForDarkMode(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getDarkMode() != 'N').toList();
+}
+
+List<Wallet> filterForMultiLanguage(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMultiLanguage() != 'N').toList();
+}
+
+List<Wallet> filterForBtcOnly(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getBtcOnly() != 'N').toList();
+}
+
+List<Wallet> filterForSelfCustody(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSelfCustody() != 'N').toList();
+}
+
+List<Wallet> filterForOpenSource(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getOpenSource() != 'N').toList();
+}
+
+List<Wallet> filterForNoKyc(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getNoKyc() != 'N').toList();
+}
+
+List<Wallet> filterForOwnNode(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getOwnNode() != 'N').toList();
+}
+
+List<Wallet> filterForTor(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getTor() != 'N').toList();
+}
+
+List<Wallet> filterForMfa(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMfa() != 'N').toList();
+}
+
+List<Wallet> filterForEncryptedBackup(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getEncryptedBackup() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForPlausibleDeniability(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getPlausibleDeniability() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForInheritance(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getInheritance() != 'N').toList();
+}
+
+List<Wallet> filterForOnChain(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getOnChain() != 'N').toList();
+}
+
+List<Wallet> filterForPassphrase(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getPassphrase() != 'N').toList();
+}
+
+List<Wallet> filterForPaynym(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getPaynym() != 'N').toList();
+}
+
+List<Wallet> filterForMultipleWallets(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getMultipleWallets() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForWatchOnly(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getWatchOnly() != 'N').toList();
+}
+
+List<Wallet> filterForMultisig(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMultisig() != 'N').toList();
+}
+
+List<Wallet> filterForHardwareWalletSupport(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getHardwareWalletSupport() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForCoinControl(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getCoinControl() != 'N').toList();
+}
+
+List<Wallet> filterForLabels(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getLabels() != 'N').toList();
+}
+
+List<Wallet> filterForNfc(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getNfc() != 'N').toList();
+}
+
+List<Wallet> filterForSilentPayments(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSilentPayments() != 'N').toList();
+}
+
+List<Wallet> filterForStonewall(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getStonewall() != 'N').toList();
+}
+
+List<Wallet> filterForPayjoin(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getPayjoin() != 'N').toList();
+}
+
+List<Wallet> filterForPsbt(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getPsbt() != 'N').toList();
+}
+
+List<Wallet> filterForRbf(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getRbf() != 'N').toList();
+}
+
+List<Wallet> filterForCpfp(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getCpfp() != 'N').toList();
+}
+
+List<Wallet> filterForTaproot(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getTaproot() != 'N').toList();
+}
+
+List<Wallet> filterForBatchTxs(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getBatchTxs() != 'N').toList();
+}
+
+List<Wallet> filterForShowXpub(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getShowXpub() != 'N').toList();
+}
+
+List<Wallet> filterForLightningNetwork(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getLightningNetwork() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForZaps(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getZaps() != 'N').toList();
+}
+
+List<Wallet> filterForLnurl(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getLnurl() != 'N').toList();
+}
+
+List<Wallet> filterForBolt12(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getBolt12() != 'N').toList();
+}
+
+List<Wallet> filterForMultiMint(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMultiMint() != 'N').toList();
+}
+
+List<Wallet> filterForMultiLsp(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getMultiLsp() != 'N').toList();
+}
+
+List<Wallet> filterForFedimint(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getFedimint() != 'N').toList();
+}
+
+List<Wallet> filterForCashu(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getCashu() != 'N').toList();
+}
+
+List<Wallet> filterForLiquid(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getLiquid() != 'N').toList();
+}
+
+List filterForUsdt(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getUsdt() != 'N').toList();
+}
+
+List filterForTrampolineRouting(List<Wallet> wallets) {
+  return wallets
+      .where((wallet) => wallet.getTrampolineRouting() != 'N')
+      .toList();
+}
+
+List<Wallet> filterForNostr(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getNostr() != 'N').toList();
+}
+
+List<Wallet> filterForContacts(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getContacts() != 'N').toList();
+}
+
+List<Wallet> filterForBtcOverEmail(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getBtcOverEmail() != 'N').toList();
+}
+
+List<Wallet> filterForPos(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getPos() != 'N').toList();
+}
+
+List<Wallet> filterForUnifiedQr(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getUnifiedQr() != 'N').toList();
+}
+
+List<Wallet> filterForSignMessage(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSignMessage() != 'N').toList();
+}
+
+List<Wallet> filterForTestnet(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getTestnet() != 'N').toList();
+}
+
+List<Wallet> filterForSignet(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSignet() != 'N').toList();
+}
+
+List<Wallet> filterForBuy(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getBuy() != 'N').toList();
+}
+
+List<Wallet> filterForSell(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSell() != 'N').toList();
+}
+
+List<Wallet> filterForShop(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getShop() != 'N').toList();
+}
+
+List<Wallet> filterForSwaps(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getSwaps() != 'N').toList();
+}
+
+List<Wallet> filterForAtomicSwaps(List<Wallet> wallets) {
+  return wallets.where((wallet) => wallet.getAtomicSwaps() != 'N').toList();
+}

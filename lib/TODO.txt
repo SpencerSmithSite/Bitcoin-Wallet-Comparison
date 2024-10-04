@@ -23,15 +23,9 @@ Pages:
 
 Cleaning up:
 
-    finish feature list of remaining wallets
-
     Some categories are ambiguous. "Swaps" for example
 
 
 Deployment:
-
-    Buy "BitcoinWalletComparison.()"
-
-    Release
 
     set up btcpayserver for donations
