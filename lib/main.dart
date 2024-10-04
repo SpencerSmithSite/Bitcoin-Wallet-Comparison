@@ -235,14 +235,36 @@ class _MyHomePageState extends State<MyHomePage> {
                               itemBuilder: (context, index) {
                                 return Row(
                                   children: [
-                                    Checkbox(
-                                      value: selectedOptions[index],
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          selectedOptions[index] =
-                                              value ?? false;
-                                        });
-                                      },
+                                    Theme(
+                                      data: ThemeData(
+                                        checkboxTheme: CheckboxThemeData(
+                                          fillColor: WidgetStateProperty
+                                              .resolveWith<Color>(
+                                            (Set<WidgetState> states) {
+                                              if (states.contains(
+                                                  WidgetState.selected)) {
+                                                return const Color.fromARGB(
+                                                    255,
+                                                    143,
+                                                    72,
+                                                    195); // Color when checked
+                                              }
+                                              return //default to clear
+                                                  const Color.fromARGB(
+                                                      0, 0, 0, 0);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                      child: Checkbox(
+                                        value: selectedOptions[index],
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            selectedOptions[index] =
+                                                value ?? false;
+                                          });
+                                        },
+                                      ),
                                     ),
                                     Flexible(
                                       child: Text(
