@@ -158,18 +158,115 @@ class _MyHomePageState extends State<MyHomePage> {
                     color: Colors.white,
                   ),
                 ),
-                trailing: IconButton(
-                  icon: Icon(
-                    isExpanded
-                        ? Icons.keyboard_arrow_up
-                        : Icons.keyboard_arrow_down,
-                    color: const Color.fromARGB(255, 105, 105, 105),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      isExpanded = !isExpanded;
-                    });
-                  },
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        resetWallets();
+
+                        // Map of filter indices to wallet methods
+                        final filterMethods = {
+                          0: (wallet) => wallet.getAndroid(),
+                          1: (wallet) => wallet.getApk(),
+                          2: (wallet) => wallet.getIos(),
+                          3: (wallet) => wallet.getWindows(),
+                          4: (wallet) => wallet.getMacos(),
+                          5: (wallet) => wallet.getLinux(),
+                          6: (wallet) => wallet.getUsa(),
+                          7: (wallet) => wallet.getDarkMode(),
+                          8: (wallet) => wallet.getMultiLanguage(),
+                          9: (wallet) => wallet.getBtcOnly(),
+                          10: (wallet) => wallet.getSelfCustody(),
+                          11: (wallet) => wallet.getOpenSource(),
+                          12: (wallet) => wallet.getNoKyc(),
+                          13: (wallet) => wallet.getOwnNode(),
+                          14: (wallet) => wallet.getTor(),
+                          15: (wallet) => wallet.getMfa(),
+                          16: (wallet) => wallet.getEncryptedBackup(),
+                          17: (wallet) => wallet.getPlausibleDeniability(),
+                          18: (wallet) => wallet.getInheritance(),
+                          19: (wallet) => wallet.getOnChain(),
+                          20: (wallet) => wallet.getPassphrase(),
+                          21: (wallet) => wallet.getPaynym(),
+                          22: (wallet) => wallet.getMultipleWallets(),
+                          23: (wallet) => wallet.getWatchOnly(),
+                          24: (wallet) => wallet.getMultisig(),
+                          25: (wallet) => wallet.getHardwareWalletSupport(),
+                          26: (wallet) => wallet.getCoinControl(),
+                          27: (wallet) => wallet.getLabels(),
+                          28: (wallet) => wallet.getNfc(),
+                          29: (wallet) => wallet.getSilentPayments(),
+                          30: (wallet) => wallet.getStonewall(),
+                          31: (wallet) => wallet.getPayjoin(),
+                          32: (wallet) => wallet.getPsbt(),
+                          33: (wallet) => wallet.getRbf(),
+                          34: (wallet) => wallet.getCpfp(),
+                          35: (wallet) => wallet.getTaproot(),
+                          36: (wallet) => wallet.getBatchTxs(),
+                          37: (wallet) => wallet.getShowXpub(),
+                          38: (wallet) => wallet.getLightningNetwork(),
+                          39: (wallet) => wallet.getZaps(),
+                          40: (wallet) => wallet.getLnurl(),
+                          41: (wallet) => wallet.getBolt12(),
+                          42: (wallet) => wallet.getMultiMint(),
+                          43: (wallet) => wallet.getMultiLsp(),
+                          44: (wallet) => wallet.getFedimint(),
+                          45: (wallet) => wallet.getCashu(),
+                          46: (wallet) => wallet.getLiquid(),
+                          47: (wallet) => wallet.getUsdt(),
+                          48: (wallet) => wallet.getTrampolineRouting(),
+                          49: (wallet) => wallet.getNostr(),
+                          50: (wallet) => wallet.getContacts(),
+                          51: (wallet) => wallet.getBtcOverEmail(),
+                          52: (wallet) => wallet.getPos(),
+                          53: (wallet) => wallet.getUnifiedQr(),
+                          54: (wallet) => wallet.getSignMessage(),
+                          55: (wallet) => wallet.getTestnet(),
+                          56: (wallet) => wallet.getSignet(),
+                          57: (wallet) => wallet.getBuy(),
+                          58: (wallet) => wallet.getSell(),
+                          59: (wallet) => wallet.getShop(),
+                          60: (wallet) => wallet.getSwaps(),
+                          61: (wallet) => wallet.getAtomicSwaps(),
+                        };
+
+                        // Loop through list of filters
+                        for (int i = 0; i < selectedOptions.length; i++) {
+                          if (selectedOptions[i]) {
+                            wallets.removeWhere(
+                                (wallet) => filterMethods[i]!(wallet) == 'N');
+                          }
+                        }
+                        setState(() {});
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                            const Color.fromARGB(255, 249, 155, 40),
+                      ),
+                      child: const Text(
+                        'Apply Filters',
+                        //Make the text grey and bold
+                        style: TextStyle(
+                          color: Color.fromARGB(255, 44, 49, 51),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: Icon(
+                        isExpanded
+                            ? Icons.keyboard_arrow_up
+                            : Icons.keyboard_arrow_down,
+                        color: const Color.fromARGB(255, 105, 105, 105),
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          isExpanded = !isExpanded;
+                        });
+                      },
+                    ),
+                  ],
                 ),
                 onTap: () {
                   setState(() {
@@ -224,9 +321,16 @@ class _MyHomePageState extends State<MyHomePage> {
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: filters.length,
                               gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    6, // Number of columns in the grid
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: screenWidth > 1204
+                                    ? 6
+                                    : screenWidth > 1005
+                                        ? 5
+                                        : screenWidth > 806
+                                            ? 4
+                                            : screenWidth > 607
+                                                ? 3
+                                                : 2,
                                 mainAxisSpacing: 6.0,
                                 crossAxisSpacing: 6.0,
                                 childAspectRatio:
@@ -301,6 +405,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               child: SfDataGrid(
                 source: CustomDataGridSource(),
+                isScrollbarAlwaysShown: true,
                 columnWidthMode: ColumnWidthMode.none,
                 frozenColumnsCount: 1,
                 columns: [
@@ -350,7 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'This project is a work in progress.\nPlease report issues/suggestions on Nostr.',
+                  'These projects update often.\nPlease report updates/inaccuracies on Nostr.',
                   style: TextStyle(color: Colors.white, fontSize: 12),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
@@ -798,7 +903,7 @@ Map<Wallet, Color> assignColorsToWallets(List<Wallet> wallets) {
 // This is a list to hold the currently displayed wallets
 List<Wallet> results = [];
 
-// This is a list that holds all of the wallets
+// // This is a list that holds all of the wallets
 List<Wallet> wallets = [
   alby,
   aqua,
@@ -830,6 +935,40 @@ List<Wallet> wallets = [
   zbd,
   zeus
 ];
+
+void resetWallets() {
+  wallets = [
+    alby,
+    aqua,
+    blink,
+    blixt,
+    blue,
+    breez,
+    cake,
+    electrum,
+    enuts,
+    envoy,
+    fedi,
+    fullyNoded,
+    green,
+    //harbor,
+    keeper,
+    muun,
+    nunchuk,
+    phoenix,
+    primal,
+    proton,
+    sparrow,
+    specter,
+    speed,
+    stack,
+    strike,
+    wos,
+    wasabi,
+    zbd,
+    zeus
+  ];
+}
 
 List<Wallet> sortByScoreAsc(List<Wallet> wallets) {
   wallets.sort((a, b) => a.getScore().compareTo(b.getScore()));

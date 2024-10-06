@@ -1178,7 +1178,7 @@ const Wallet nunchuk = Wallet(
     tor: 'N',
     mfa: 'N',
     encryptedBackup: 'Y',
-    plausibleDeniability: 'N',
+    plausibleDeniability: 'Y',
     inheritance: 'Y',
     onChain: 'Y',
     passphrase: 'N',

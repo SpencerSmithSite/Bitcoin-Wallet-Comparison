@@ -2,7 +2,7 @@ Functionality:
 
     Add sorting functionality
 
-    Make the android, ios, windows, mac, and linux icons clickable links that take you to the wallets download page
+    Change the filter rows depending on screen size
 
     Make the logo a button to take you back to the main page. 
 
