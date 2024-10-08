@@ -455,7 +455,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Align(
                 alignment: Alignment.center,
                 child: Text(
-                  'These projects update often.\nPlease report updates/inaccuracies on Nostr.',
+                  'These projects update often.\nPlease report any updates/inaccuracies.',
                   style: TextStyle(color: Colors.white, fontSize: 12),
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
@@ -476,6 +476,25 @@ class _MyHomePageState extends State<MyHomePage> {
                     'assets/nostr.png',
                     width: 50,
                     height: 50,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    _launchURL(
+                      'https://x.com/spencersmthsite',
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/logo-white.png',
+                    width: 20,
+                    height: 20,
                     fit: BoxFit.contain,
                   ),
                 ),
