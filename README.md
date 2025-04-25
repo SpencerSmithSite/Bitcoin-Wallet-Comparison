@@ -2,6 +2,8 @@
 
 A comprehensive comparison tool for Bitcoin wallets, helping users make informed decisions about which wallet best suits their needs.
 
+![image](https://github.com/user-attachments/assets/2b42c628-0b53-4bdb-ae94-1828307e7022)
+
 ## Features
 
 - Compare multiple Bitcoin wallets side-by-side
