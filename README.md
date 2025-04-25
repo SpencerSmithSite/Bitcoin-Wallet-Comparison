@@ -10,6 +10,7 @@ A comprehensive comparison tool for Bitcoin wallets, helping users make informed
 - Filter wallets based on key features and requirements
 - Detailed information about security, usability, and functionality
 - Wallet links and ratings
+- Configured for functional PWAs
 
 ## Contributing
 
