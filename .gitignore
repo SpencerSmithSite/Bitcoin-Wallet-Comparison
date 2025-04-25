@@ -10,6 +10,25 @@
 .svn/
 migrate_working_dir/
 
+# Environment files
+*.env
+*.env.*
+*.lock
+
+# Security files
+*.pem
+*.key
+*.pub
+
+# Temporary files
+*.orig
+*.bak
+*.tmp
+*.temp
+*.pid
+*.seed
+*.pid.lock
+
 # IntelliJ related
 *.iml
 *.ipr

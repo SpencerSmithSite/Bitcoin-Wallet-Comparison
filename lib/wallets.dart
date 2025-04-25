@@ -1,4 +1,4 @@
-import 'walletClass.dart';
+import 'wallet_class.dart';
 
 // HERE COME THE WALLETS
 // BRACE YOURSELVES

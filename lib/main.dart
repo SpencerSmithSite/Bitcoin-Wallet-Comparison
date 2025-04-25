@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'walletClass.dart';
+import 'wallet_class.dart';
 import 'wallets.dart';
 import 'categories.dart';
 import 'package:firebase_core/firebase_core.dart';

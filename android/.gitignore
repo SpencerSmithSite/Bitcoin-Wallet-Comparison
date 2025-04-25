@@ -6,6 +6,11 @@ gradle-wrapper.jar
 /local.properties
 GeneratedPluginRegistrant.java
 
+# Android build artifacts
+*.apk
+*.aab
+*.dex
+
 # Remember to never publicly share your keystore.
 # See https://flutter.dev/to/reference-keystore
 key.properties
